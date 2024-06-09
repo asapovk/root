@@ -95,3 +95,7 @@ export const lettersSlice = Slice<
   },
   lettersInitialState
 );
+
+window['lettersSlice'] = lettersSlice;
+
+export default lettersSlice;

@@ -169,3 +169,7 @@ export const composeSlice = Slice<
   },
   composeInitialState
 );
+window['composeSlice'] = composeSlice;
+
+
+export default composeSlice;
