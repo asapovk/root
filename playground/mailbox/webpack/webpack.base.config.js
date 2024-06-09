@@ -19,6 +19,14 @@ module.exports = {
       import: SourceDIR + 'playground/mailbox/src/letters/letters.config.ts',
       dependOn: 'reflexio',
     },
+    compose: {
+      import: SourceDIR + 'playground/mailbox/src/compose/compose.config.ts',
+      dependOn: 'reflexio',
+    },
+    folders: {
+      import: SourceDIR + 'playground/mailbox/src/folders/folders.config.ts',
+      dependOn: 'reflexio',
+    },
     main: {
       import: SourceDIR + 'playground/mailbox/src/root.ts',
       dependOn: 'reflexio',
@@ -92,7 +100,7 @@ module.exports = {
 
   plugins: [
     new HtmlWebpackPlugin({
-      inject: true,
+      inject: false,
       template: path.resolve(
         ProjectDIR,
         'playground/mailbox/public/index.html'

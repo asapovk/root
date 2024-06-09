@@ -1,6 +1,6 @@
 import { createStore, applyMiddleware, compose, Middleware, combineReducers } from 'redux';
-import { composeSlice } from '..//compose/compose.config';
-import { sidebarSlice } from '../folders/folders.config';
+//import { composeSlice } from '..//compose/compose.config';
+//import { sidebarSlice } from '../folders/folders.config';
 //import { lettersSlice } from '../letters/letters.config';
 import { notificationSlice } from '..//notification/notification.config';
 import { popupSlice } from '../popup/popup.config';
@@ -39,6 +39,43 @@ setTimeout( async()=> {
     console.log('NO LS module');
   }
 
+  await moduleManager.loadScript('/compose.js')
+  //@ts-ignore
+  const cp = window.composeSlice;
+  if(cp) {
+    console.log('LOADED COMPOSE MODULE');
+    reducers['compose'] = cp.reducer['compose'];
+    rootReducer = combineReducers({...reducers});
+    store.replaceReducer(rootReducer);
+    composeMvHSManager.addMiddleware(cp.middleware)
+    store.dispatch({
+      'type': 'setContent/init',
+      payload: null,
+    })
+  }
+  else {
+    console.log('NO CP module');
+  }
+
+
+  await moduleManager.loadScript('/folders.js')
+  //@ts-ignore
+  const sb = window.sidebarSlice;
+  if(sb) {
+    console.log('LOADED FOLDERS MODULE');
+    reducers['folders'] = sb.reducer['folders'];
+    rootReducer = combineReducers({...reducers});
+    store.replaceReducer(rootReducer);
+    foldersMvHSManager.addMiddleware(sb.middleware)
+    store.dispatch({
+      'type': 'folders/init',
+      payload: null,
+    })
+  }
+  else {
+    console.log('NO SB module');
+  }
+
   // import('../letters/letters.config' ).then( module => {
   //   //@ts-ignore
   //   reducers['letters'] = module.default.reducer['letters'];
@@ -75,7 +112,7 @@ setTimeout( async()=> {
   //     payload: null,
   //   })
   // })
-},1000)
+},5000)
 
 
 function configureStore() {
@@ -85,10 +122,10 @@ function configureStore() {
     lettersMvHSManager.cumulativeMiddleWare,
     composeMvHSManager.cumulativeMiddleWare,
     foldersMvHSManager.cumulativeMiddleWare,
-    composeSlice.middleware,
+    //composeSlice.middleware,
     notificationSlice.middleware,
     popupSlice.middleware,
-    sidebarSlice.middleware,
+    //sidebarSlice.middleware,
     appSlice.middleware,
   ];
   let mw = applyMiddleware(...middlewares)
